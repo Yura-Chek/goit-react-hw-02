@@ -6,10 +6,11 @@ import Notification from "./components/Notification/Notification";
 import "./App.css";
 
 export default function App() {
-  const [responseType, setResponseType] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [responseType, setResponseType] = useState(() => {
+    const savedFeedback = localStorage.getItem("responseType");
+    return savedFeedback
+      ? JSON.parse(savedFeedback)
+      : { good: 0, neutral: 0, bad: 0 };
   });
 
   const updateFeedback = (feedbackType) => {
@@ -22,7 +23,12 @@ export default function App() {
   const totalFeedback =
     responseType.good + responseType.neutral + responseType.bad;
 
-  const positiveFeedback = responseType.good + responseType.neutral;
+  // const positiveFeedback = responseType.good + responseType.neutral;
+
+  const positiveLevel =
+    totalFeedback > 0
+      ? Math.round((responseType.good / totalFeedback) * 100)
+      : 0;
 
   const resetFeedback = () => {
     setResponseType({ good: 0, neutral: 0, bad: 0 });
@@ -34,14 +40,17 @@ export default function App() {
   return (
     <div>
       <Description />
-      <Options updateFeedback={updateFeedback} resetFeedback={resetFeedback} />
+      <Options
+        updateFeedback={updateFeedback}
+        resetFeedback={resetFeedback}
+        totalFeedback={totalFeedback}
+      />
       {!totalFeedback && <Notification />}
       {totalFeedback > 0 && (
         <Feedback
           count={responseType}
-          updateFeedback={updateFeedback}
           total={totalFeedback}
-          positiveFeedback={positiveFeedback}
+          positiveLevel={positiveLevel}
         />
       )}
     </div>
