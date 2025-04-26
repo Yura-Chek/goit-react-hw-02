@@ -1,13 +1,30 @@
 import css from "./Options.module.css";
 
-const Options = () => {
+export default function Options({ updateFeedback, resetFeedback }) {
   return (
-    <div className={css.container}>
-      <button onClick={() => onFeedback("good")}>Good</button>
-      <button onClick={() => onFeedback("neutral")}>Neutral</button>
-      <button onClick={() => onFeedback("bad")}>Bad</button>
+    <div>
+      <button
+        onClick={() => {
+          updateFeedback("good");
+        }}
+      >
+        Good
+      </button>
+      <button
+        onClick={() => {
+          updateFeedback("neutral");
+        }}
+      >
+        Neutral
+      </button>
+      <button
+        onClick={() => {
+          updateFeedback("bad");
+        }}
+      >
+        Bad
+      </button>
+      <button onClick={resetFeedback}>Reset</button>
     </div>
   );
-};
-
-export default Options;
+}
